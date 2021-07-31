@@ -1,14 +1,9 @@
-const Sequelize=require('sequelize')
+const Sequelize=require('sequelize');
 
 module.exports=class User extends Sequelize.Model{
 	static init(sequelize){
 		return super.init(db)({
 			email:{
-				type:Sequelize.STRING(40),
-				allowNull:false,
-				unique:true
-			},
-			id:{
 				type:Sequelize.STRING(40),
 				allowNull:false,
 				unique:true
@@ -23,6 +18,29 @@ module.exports=class User extends Sequelize.Model{
 				unique:true
 			}
 			
-		})
+		},{
+			sequelize,
+			timastamps:true,
+			underscored:false,
+			modelName:'User',
+			tableName:'users',
+			paranoid:true,
+			charset:'utf8',
+			collate:'utf8_general_ci',
+		});
 	}
-}
+	static associate(db){
+		db.User.belongsToMany(db.User,{
+			foreignKey:'followingId',
+			as:'Followings',
+			through:'Follow',
+		});
+		db.User.belongsToMany(db.User,{
+			foreignKey:'followingId',
+			as:'Followers',
+			through:'Follow',
+		});
+		db.User.hasMany(db.Post);
+		db.User.hasMany(db.Comment);
+	}
+};
