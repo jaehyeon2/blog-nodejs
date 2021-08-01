@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h2>
+	{{category.category}}
+</h2>
+<div>
+	<table id="post-list">
+		<tr>
+			<td>제목</td>
+			<td>작성자</td>
+			<td>작성일</td>
+			<td>조회 수</td>
+		</tr>
+		{% for post in posts %}
+		<tr>
+			<td><a href="/post/{{post.id}}">{{post.title}}</a></td>
+			<td>{{post.owner}}</td>
+			<td>{{post.time}}</td>
+			<td>{{post.views}}</td>
+		</tr>
+		{% endfor %}
+	</table>
+</div>
