@@ -1,4 +1,4 @@
-const Sequelize require('sequelize');
+const Sequelize=require('sequelize');
 
 module.exports=class Post extends Sequelize.Model{
 	static init(sequelize){
@@ -11,6 +11,10 @@ module.exports=class Post extends Sequelize.Model{
 				type:Sequelize.STRING(500),
 				allowNull:false,
 			},
+			writer:{
+				type:Sequelize.STRING(40),
+				allowNull:false,
+			}
 		},{
 			sequelize,
 			timastamps:true,

@@ -8,6 +8,11 @@ module.exports=class Category extends Sequelize.Model{
 				allowNull:false,
 				unique:true,
 			},
+			postnum:{
+				type:Sequelize.INTEGER,
+				allowNull:false,
+				defaultValue:0,
+			}
 		},{
 			sequelize,
 			timastamps:true,
