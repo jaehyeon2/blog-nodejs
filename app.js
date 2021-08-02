@@ -1,9 +1,11 @@
-const express=require('express')
-const path=require('path')
-const morgan=require('morgan')
-const express=require('express-session')
+const express=require('express');
+const path=require('path');
+const morgan=require('morgan');
+const session=require('express-session');
 const nunjucks=require('nunjucks');
 const dotenv=require('dotenv');
+const passport=require('passport');
+const cookieParser=require('cookie-parser');
 
 dotenv.config();
 const indexRouter=require('./routes/index');
@@ -40,7 +42,7 @@ const sessionMiddleware=session({
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json())
-app.use(express.urlencoded({extendd:false}))
+app.use(express.urlencoded({extended:false}))
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(sessionMiddleware);
 app.use(passport.initialize());

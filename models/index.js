@@ -12,7 +12,7 @@ const sequelize=new Sequelize(
 	config.database, config.username, config.password, config,
 );
 
-db.Sequelize=sequelize;
+db.sequelize=sequelize;
 db.User=User;
 db.Post=Post;
 db.Category=Category;

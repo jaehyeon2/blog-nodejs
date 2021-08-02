@@ -36,8 +36,8 @@ module.exports=class Post extends Sequelize.Model{
 		});
 	}
 	static associate(db){
-		db.Post.belongsToMany(db.User, {as:'Owner'});
-		db.Post.belongsToMany(db.Category);
+		db.Post.belongsTo(db.User);
+		db.Post.belongsTo(db.Category);
 		db.Post.hasMany(db.Comment);
 	}
 };

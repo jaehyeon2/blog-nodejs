@@ -35,18 +35,44 @@ router.get('/write_post', isLoggedIn, (req, res)=>{
 	});
 });
 
-router.pose('/write_post', isLoggedIn, async(req, res, next)=>{
+router.post('/write_post', isLoggedIn, async(req, res, next)=>{
 	try{
 		const posts=await Post.fincAll({
 			where:{category:req.params.category},
-			include:{
-				model:'User',
-				as:'Owner',
-			},
 		});
 		res.render('category',{
 			title:`blog-${category}`,
 			posts,
 		});
+	}catch(error){
+		console.error(error);
+		next(error);
 	}
 });
+
+router.get('/post/:id', async(req, res, next)=>{
+	try{
+		const post_tmp=await Post.findOne({
+			where:{id:req.params.id},
+		});
+		await Post.update({
+			views:post_tmp.views+1,
+		},{
+			where:{id:req.params.id},
+		});
+		
+		const post=await Post.findOne({
+			where:{id:req.params.id},
+		});
+		
+		res.render('post', {
+			title:`${post.title}-NodeBoard`,
+			post,
+		});
+	}catch(error){
+		console.error(error);
+		next(error);
+	}
+});
+
+module.exports = router;
