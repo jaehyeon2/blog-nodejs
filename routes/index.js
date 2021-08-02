@@ -34,3 +34,19 @@ router.get('/write_post', isLoggedIn, (req, res)=>{
 		title:'글쓰기-blog',
 	});
 });
+
+router.pose('/write_post', isLoggedIn, async(req, res, next)=>{
+	try{
+		const posts=await Post.fincAll({
+			where:{category:req.params.category},
+			include:{
+				model:'User',
+				as:'Owner',
+			},
+		});
+		res.render('category',{
+			title:`blog-${category}`,
+			posts,
+		});
+	}
+});
