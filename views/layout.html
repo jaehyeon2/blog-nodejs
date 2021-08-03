@@ -8,6 +8,7 @@
 		<link rel="stylesheet" href="/main.css">
 	</head>
 	<body>
+		
 		<div class="container">
 			<div class="profile">
 				  {% if user and user.id %}
@@ -39,6 +40,7 @@
 			{% block content %}
 			{% endblock %}
 		</div>
+		<script type="text/javascript" src="js/jquery.js"></script>
 		<script>
 			window.onload=()=>{
 				if(new URL(location.href).searchParams.get('loginError')){
@@ -46,6 +48,5 @@
 				}
 			};
 		</script>
-		<script src="node_modules/jquery/distjquery.js"></script>
 	</body>
 </html>
