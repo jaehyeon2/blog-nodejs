@@ -4,11 +4,22 @@
 <div class="timeline">
 	<form action="/writer_post" id="post-form" method="post" >
 		<div class="input-group">
-			<label for="post-title">제목</label>
+			<label for="post-title">제목</label><br/>
 			<input type="text" id="post-title" name="title" required autofocus>
 		</div>
 		<div class="input-group">
-			<label for="post-content">내용</label>
+			<label for="post-category">카테고리</label><br/>
+			<select name="category" id="category">
+				<option value="">카테고리 선택</option>
+				{% for category in categories %}
+				<option value="{{category.category}}">{{category.category}}</option>
+				{% endfor %}
+				<option value="direct">직접 입력</option>
+			</select>
+			<input type="text" id="directBox" name="directBox"/>
+		</div>
+		<div class="input-group">
+			<label for="post-content">내용</label><br/>
 			<textarea id="post-content" name="content" placeholder="내용을 입력하세요"></textarea>
 		</div>
 		<button id="join-btn" class="btn" type="submit">
@@ -16,4 +27,16 @@
 		</button>
 	</form>
 </div>
+<script>
+$(function(){
+	$("#directBox").hide();
+	$("#category").change(function() {
+		if($("#category").val() == "direct") {
+			$("#directBox").show();
+		}else{
+			$("#directBox").hide();	
+		}
+	})
+});
+</script>
 {% endblock %}

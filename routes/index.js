@@ -12,7 +12,7 @@ router.use((req, res, next)=>{
 
 router.get('/', async(req, res, next)=>{
 	try{
-		const categories=await Category.findAll({order:['id', 'DESC']});
+		const categories=await Category.findAll({order:[['id', 'DESC']]});
 		res.render('main',{
 			title:'blog-main',
 			categories,
