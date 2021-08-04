@@ -37,7 +37,7 @@ router.get('/write_post', isLoggedIn, (req, res)=>{
 
 router.post('/write_post', isLoggedIn, async(req, res, next)=>{
 	try{
-		const posts=await Post.fincAll({
+		const posts=await Post.findAll({
 			where:{category:req.params.category},
 		});
 		res.render('category',{
