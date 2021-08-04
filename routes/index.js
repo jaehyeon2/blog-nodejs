@@ -36,14 +36,25 @@ router.get('/write_post', isLoggedIn, (req, res)=>{
 });
 
 router.post('/write_post', isLoggedIn, async(req, res, next)=>{
+	const today = new Date();   
+	const time=today.getFullYear()+'/'+(today.getMonth()+1)+'/'+today.getDate()+' '+today.getHours()+':'+today.getMinutes()+':'+today.getSeconds();
 	try{
-		const posts=await Post.findAll({
-			where:{category:req.params.category},
+		const {title, content, category}=req.body;
+		console.log('title', title);
+		console.log('content', content);
+		const post=await Post.create({
+			owner:req.user.nick,
+			title,
+			content,
+			category,
+			time:time,
+			view:0,
 		});
-		res.render('category',{
-			title:`blog-${category}`,
-			posts,
+		
+		const cate = Category.findOrCreate({
+			where:{category:category},
 		});
+		res.redirect('/');
 	}catch(error){
 		console.error(error);
 		next(error);
