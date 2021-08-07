@@ -29,10 +29,17 @@ router.get('/join', isNotLoggedIn, (req, res)=>{
 	});
 });
 
-router.get('/write_post', isLoggedIn, (req, res)=>{
-	res.render('write',{
-		title:'글쓰기-blog',
-	});
+router.get('/write_post', isLoggedIn, async(req, res, next)=>{
+	try{
+		const categories=await Category.findAll({});
+		res.render('write',{
+			title:'글쓰기-blog',
+			categories,
+		});
+	}catch(error){
+		console.error(error);
+		next(error);
+	}
 });
 
 router.get('/category/:id', async(req, res, next)=>{
@@ -77,7 +84,7 @@ router.post('/write_post', isLoggedIn, async(req, res, next)=>{
 		await Post.update({
 			views:postnumber+1,
 		},{
-			where:{id:req.params.id},
+			where:{category:category},
 		});
 		res.redirect('/');
 	}catch(error){
