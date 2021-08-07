@@ -39,7 +39,9 @@ router.get('/category/:id', async(req, res, next)=>{
 	try{
 		const category_temp=Category.findOne({
 			where:{id:req.params.id},
+			attributes:['category'],
 		});
+		console.log('category:', category_temp);
 		const posts=Post.findAll({
 			where:{category:category_temp},
 		});
