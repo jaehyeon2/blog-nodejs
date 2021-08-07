@@ -35,6 +35,20 @@ router.get('/write_post', isLoggedIn, (req, res)=>{
 	});
 });
 
+router.get('/category/:id', async(req, res, next)=>{
+	try{
+		const category_temp=Category.findOne({
+			where:{id:req.params.id},
+		});
+		const posts=Post.findAll({
+			where:{category:category_temp},
+		});
+	}catch(error){
+		console.error(error);
+		next(error);
+	}
+})
+
 router.post('/write_post', isLoggedIn, async(req, res, next)=>{
 	const today = new Date();   
 	const time=today.getFullYear()+'/'+(today.getMonth()+1)+'/'+today.getDate()+' '+today.getHours()+':'+today.getMinutes()+':'+today.getSeconds();
@@ -43,7 +57,7 @@ router.post('/write_post', isLoggedIn, async(req, res, next)=>{
 		console.log('title', title);
 		console.log('content', content);
 		const post=await Post.create({
-			owner:req.user.nick,
+			writer:req.user.nick,
 			title,
 			content,
 			category,
@@ -53,6 +67,15 @@ router.post('/write_post', isLoggedIn, async(req, res, next)=>{
 		
 		const cate = Category.findOrCreate({
 			where:{category:category},
+		});
+		const postnumber=await Post.findOne({
+			attributes:['postnum'],
+			where:{id:req.params.id},
+		})
+		await Post.update({
+			views:postnumber+1,
+		},{
+			where:{id:req.params.id},
 		});
 		res.redirect('/');
 	}catch(error){
