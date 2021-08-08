@@ -11,6 +11,10 @@ module.exports=class Post extends Sequelize.Model{
 				type:Sequelize.STRING(500),
 				allowNull:false,
 			},
+			category:{
+				type:Sequelize.STRING(40),
+				allowNull:false,
+			},
 			writer:{
 				type:Sequelize.STRING(40),
 				allowNull:false,

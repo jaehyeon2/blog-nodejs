@@ -44,14 +44,17 @@ router.get('/write_post', isLoggedIn, async(req, res, next)=>{
 
 router.get('/category/:id', async(req, res, next)=>{
 	try{
-		const category_temp=Category.findOne({
+		const category=await Category.findOne({
 			where:{id:req.params.id},
-			attributes:['category'],
 		});
-		console.log('category:', category_temp);
-		const posts=Post.findAll({
-			where:{category:category_temp},
+		console.log('category:', category.category);
+		const posts=await Post.findAll({
+			where:{category:category.category},
 		});
+		res.render('category', {
+			title:`${category.category}-blog`,
+			posts,
+		})
 	}catch(error){
 		console.error(error);
 		next(error);
@@ -65,6 +68,7 @@ router.post('/write_post', isLoggedIn, async(req, res, next)=>{
 		const {title, content, category}=req.body;
 		console.log('title', title);
 		console.log('content', content);
+		console.log('category', category);
 		const post=await Post.create({
 			writer:req.user.nick,
 			title,
@@ -72,16 +76,16 @@ router.post('/write_post', isLoggedIn, async(req, res, next)=>{
 			category,
 			time:time,
 			view:0,
-		});
+		}); 
 		
 		const cate = Category.findOrCreate({
 			where:{category:category},
 		});
-		const postnumber=await Post.findOne({
+		const postnumber=await Category.findOne({
 			attributes:['postnum'],
-			where:{id:req.params.id},
+			where:{categry:category},
 		})
-		await Post.update({
+		await Category.update({
 			views:postnumber+1,
 		},{
 			where:{category:category},
@@ -109,7 +113,7 @@ router.get('/post/:id', async(req, res, next)=>{
 		});
 		
 		res.render('post', {
-			title:`${post.title}-NodeBoard`,
+			title:`${post.title}-blog`,
 			post,
 		});
 	}catch(error){
