@@ -81,15 +81,7 @@ router.post('/write_post', isLoggedIn, async(req, res, next)=>{
 		const cate = Category.findOrCreate({
 			where:{category:category},
 		});
-		const postnumber=await Category.findOne({
-			attributes:['postnum'],
-			where:{categry:category},
-		})
-		await Category.update({
-			views:postnumber+1,
-		},{
-			where:{category:category},
-		});
+		
 		res.redirect('/');
 	}catch(error){
 		console.error(error);

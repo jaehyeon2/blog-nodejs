@@ -9,14 +9,14 @@
 		</div>
 		<div class="input-group">
 			<label for="post-category">카테고리</label><br/>
-			<select name="category_sel" id="category_sel" onchange="value_change()">
+			<select name="category_sel" id="category_sel" onchange="selTitle(this.value)">
 				<option value="">카테고리 선택</option>
 				{% for category in categories %}
 				<option value="{{category.category}}">{{category.category}}</option>
 				{% endfor %}
 				<option value="direct">직접 입력</option>
 			</select>
-			<input type="text" id="category" name="category" disabled/>
+			<input type="text" id="category" name="category"/>
 		</div>
 		<div class="input-group">
 			<label for="post-content">내용</label><br/>
@@ -28,14 +28,15 @@
 	</form>
 </div>
 <script>
-	function value_change(){
-		if(document.ctgory.category_sel.options[document.ctgory.category_sel.selectedIndex].value == 'direct'){
-			document.ctgory.category.disabled = false;
-			document.ctgory.category.value = "";
-			document.ctgory.category.focus();
-		} else{
-			document.ctgory.category.disabled = true;
-			document.ctgory.category.value = document.ctgory.category_sel.options[document.ctgory.category2.selectedIndex].value;
+	function selTitle(str) {
+		if (str == "direct") {
+			document.getElementById("category").value = "";
+			document.getElementById("category").readOnly = false;
+			document.getElementById("category").focus();
+			
+		} else {
+			document.getElementById("category").value = str;
+			document.getElementById("category").readOnly = true;
 		}
 	}
 </script>
