@@ -81,6 +81,15 @@ router.post('/write_post', isLoggedIn, async(req, res, next)=>{
 		const cate = Category.findOrCreate({
 			where:{category:category},
 		});
+		const postnumber=await Category.findOne({
+			attributes:['postnum'],
+			where:{category:category},
+		})
+		await Category.update({
+			postnum:postnumber+1,
+		},{
+			where:{category:category},
+		});
 		
 		res.redirect('/');
 	}catch(error){
@@ -108,6 +117,38 @@ router.get('/post/:id', async(req, res, next)=>{
 			title:`${post.title}-blog`,
 			post,
 		});
+	}catch(error){
+		console.error(error);
+		next(error);
+	}
+});
+
+router.post('/delete/:id', isLoggedIn, async(req, res, next)=>{
+	try{
+		const post=await Post.findOne({
+			where:{id:req.params.id}
+		});
+		
+		await Post.destroy({where:{id:req.params.id}});
+		
+		const postnumber=await Category.findOne({
+			attributes:['postnum'],
+			where:{category:post.category},
+		});
+		await Category.update({
+			postnum:postnumber-1,
+		},{
+			where:{category:post.category},
+		});
+		const rest_post=await Category.findOne({
+			attributes:['postnum'],
+			where:{category:post.category},
+		});
+		if(rest_post==0){
+			await Category.destroy({where:{category:post.category}});
+		}
+		
+		res.redirect('/');
 	}catch(error){
 		console.error(error);
 		next(error);
