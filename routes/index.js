@@ -80,13 +80,16 @@ router.post('/write_post', isLoggedIn, async(req, res, next)=>{
 		
 		const cate = Category.findOrCreate({
 			where:{category:category},
+			defaults: {
+				postnum:0,
+			},
 		});
-		const postnumber=await Category.findOne({
-			attributes:['postnum'],
+		const cate_temp=await Category.findOne({
 			where:{category:category},
-		})
+		});
+		console.log('postnum', cate_temp.postnum);
 		await Category.update({
-			postnum:postnumber+1,
+			postnum:cate_temp.postnum+1,
 		},{
 			where:{category:category},
 		});
