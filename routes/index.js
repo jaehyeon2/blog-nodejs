@@ -64,6 +64,7 @@ router.get('/category/:id', async(req, res, next)=>{
 router.post('/write_post', isLoggedIn, async(req, res, next)=>{
 	const today = new Date();   
 	const time=today.getFullYear()+'/'+(today.getMonth()+1)+'/'+today.getDate()+' '+today.getHours()+':'+today.getMinutes()+':'+today.getSeconds();
+	const post_num=0;
 	try{
 		const {title, content, category}=req.body;
 		console.log('title', title);
@@ -78,16 +79,17 @@ router.post('/write_post', isLoggedIn, async(req, res, next)=>{
 			view:0,
 		}); 
 		
-		const cate = Category.findOrCreate({
+		const cate = await Category.findOrCreate({
+			
 			where:{category:category},
 			defaults: {
 				postnum:0,
 			},
 		});
-		const cate_temp=await Category.findOne({
+		const cate_temp= await Category.findOne({
 			where:{category:category},
 		});
-		console.log('postnum', cate_temp.postnum);
+		console.log('category', cate_temp);
 		await Category.update({
 			postnum:cate_temp.postnum+1,
 		},{
@@ -95,31 +97,6 @@ router.post('/write_post', isLoggedIn, async(req, res, next)=>{
 		});
 		
 		res.redirect('/');
-	}catch(error){
-		console.error(error);
-		next(error);
-	}
-});
-
-router.get('/post/:id', async(req, res, next)=>{
-	try{
-		const post_tmp=await Post.findOne({
-			where:{id:req.params.id},
-		});
-		await Post.update({
-			views:post_tmp.views+1,
-		},{
-			where:{id:req.params.id},
-		});
-		
-		const post=await Post.findOne({
-			where:{id:req.params.id},
-		});
-		
-		res.render('post', {
-			title:`${post.title}-blog`,
-			post,
-		});
 	}catch(error){
 		console.error(error);
 		next(error);
@@ -152,6 +129,31 @@ router.post('/delete/:id', isLoggedIn, async(req, res, next)=>{
 		}
 		
 		res.redirect('/');
+	}catch(error){
+		console.error(error);
+		next(error);
+	}
+});
+
+router.get('/post/:id', async(req, res, next)=>{
+	try{
+		const post_tmp=await Post.findOne({
+			where:{id:req.params.id},
+		});
+		await Post.update({
+			views:post_tmp.views+1,
+		},{
+			where:{id:req.params.id},
+		});
+		
+		const post=await Post.findOne({
+			where:{id:req.params.id},
+		});
+		
+		res.render('post', {
+			title:`${post.title}-blog`,
+			post,
+		});
 	}catch(error){
 		console.error(error);
 		next(error);
