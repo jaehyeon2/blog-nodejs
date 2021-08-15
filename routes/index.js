@@ -108,24 +108,29 @@ router.post('/delete/:id', isLoggedIn, async(req, res, next)=>{
 		const post=await Post.findOne({
 			where:{id:req.params.id}
 		});
-		
-		await Post.destroy({where:{id:req.params.id}});
-		
-		const postnumber=await Category.findOne({
-			attributes:['postnum'],
-			where:{category:post.category},
-		});
-		await Category.update({
-			postnum:postnumber-1,
-		},{
-			where:{category:post.category},
-		});
-		const rest_post=await Category.findOne({
-			attributes:['postnum'],
-			where:{category:post.category},
-		});
-		if(rest_post==0){
-			await Category.destroy({where:{category:post.category}});
+		const category=post.category
+		if(req.user.nick!=post.writer){
+			//res.send
+		}else{
+			await Post.destroy({where:{id:req.params.id}});
+			
+			const postnumber=await Category.findOne({
+				attributes:['postnum'],
+				where:{category:category},
+			});
+			await Category.update({
+				postnum:postnumber-1,
+			},{
+				where:{category:category},
+			});
+			const rest_post=await Category.findOne({
+				attributes:['postnum'],
+				where:{category:category},
+			});
+			console.log('')
+			if(rest_post==0){
+				await Category.destroy({where:{category:category}});
+			}
 		}
 		
 		res.redirect('/');
