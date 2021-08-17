@@ -114,21 +114,18 @@ router.post('/delete/:id', isLoggedIn, async(req, res, next)=>{
 		}else{
 			await Post.destroy({where:{id:req.params.id}});
 			
-			const postnumber=await Category.findOne({
-				attributes:['postnum'],
+			const cate_temp=await Category.findOne({
 				where:{category:category},
 			});
+			console.log('poposptopst', cate_temp.postnum);
+			const rest=cate_temp.postnum-1;
+			console.log('sdfsdf', rest)
 			await Category.update({
-				postnum:postnumber-1,
+				postnum:rest,
 			},{
 				where:{category:category},
 			});
-			const rest_post=await Category.findOne({
-				attributes:['postnum'],
-				where:{category:category},
-			});
-			console.log('')
-			if(rest_post==0){
+			if(rest==0){
 				await Category.destroy({where:{category:category}});
 			}
 		}
