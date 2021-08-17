@@ -9,7 +9,7 @@ module.exports=class Comment extends Sequelize.Model{
 			},
 		},{
 			sequelize,
-			timastamps:true,
+			timestamps:true,
 			underscored:false,
 			modelName:'Comment',
 			tableName:'comments',

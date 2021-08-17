@@ -110,7 +110,7 @@ router.post('/delete/:id', isLoggedIn, async(req, res, next)=>{
 		});
 		const category=post.category
 		if(req.user.nick!=post.writer){
-			//res.send
+			return res.redirect('/?authError=작성자만 삭제할 수 있습니다.');
 		}else{
 			await Post.destroy({where:{id:req.params.id}});
 			

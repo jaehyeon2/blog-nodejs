@@ -15,7 +15,7 @@ module.exports=class Category extends Sequelize.Model{
 			}
 		},{
 			sequelize,
-			timastamps:true,
+			timestamps:true,
 			underscored:false,
 			modelName:'Category',
 			tableName:'categories',
